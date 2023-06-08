@@ -158,6 +158,7 @@ class MapConstructorSegment:
 
         return segments_dict
     
+
     def _compute_connection(self, segments_dict: dict) -> dict:
         '''
         根据片段计算连接性
