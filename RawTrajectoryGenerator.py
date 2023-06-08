@@ -28,7 +28,7 @@ class RawTrajectoryGenerator:
                 paper_info = list(self.papers.find({"id": paper_id, "references": {"$exists": True, "$ne": []}}, {"id": 1, "references": 1, "_id": 0})) #查找非空引用并返回
                 if paper_info:
                     refs_info = list(self.papers.find({"id": {"$in": paper_info[0]['references']}, "abstract": {"$ne": None, "$ne": ""}}, {"id": 1, "year": 1, "_id": 0})) #引用中摘要非空
-                    refs_info = {info["id"]: info["year"] for info in refs_info if info["year"] >= 1996} #只保留1996年之后的文献
+                    # refs_info = {info["id"]: info["year"] for info in refs_info if info["year"] >= 1996} #只保留1996年之后的文献
                     trajectory = [(paper_id, year)] + [(ref_id, refs_info[ref_id]) for ref_id in refs_info] #修改：这个地方可能有问题，因为ref_id是字典的字段，不能作为list的下标，并且，也只会拼接成元组列表
                     if len(trajectory) >= 3:
                         self.raw_trajectory[paper_id] = sorted(trajectory, key=lambda x: x[1])  # 修改：按年份排序,x[1]作为key有误，元组列表的第一个元素的第二项才是year，lambda x: x[0][1]
