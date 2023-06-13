@@ -104,3 +104,32 @@ class MapMatchingSegment:
 
         # 保存原始主题轨迹
         self._save_topic_trajectory(topic_trajectories)
+
+    def _generate_concentrated_subgraph(self, pid: str, one_topic_trajectory: list) -> list:
+        '''
+        :param one_topic_trajectory: pid, tra in topic_trajectories.items()
+        topic_trajecories: {pid: [(pid, (1998, topic1)),...], ...}
+        因此，one_topic_trajectory是一个元组列表
+        :returns: 返回一个nodeid列表，nodeid是一个string，f"{year}_{topic}"        '''
+        root_id = None
+        root_year = None
+        for item in reversed(one_topic_trajectory):#找到根节点
+            if item[0] == pid:
+                root_id = item
+                root_year = item[1][0]
+        
+        root_id = (root_id[0], f"{root_id[1][0]}_{root_id[1][0]}") #(pid, year_topic)
+        concentrated_graph = ConcentratedSubgraph(root_id,self.reachable_nodes_index)
+
+        for new_node in reversed(one_topic_trajectory):
+            if root_year > new_node[1][0]: #仅仅寻找年份之前的
+                new_node = (new_node[0],f"{new_node[1][0]}_{new_node[1][1]}")
+                concentrated_graph.add_node(new_node)
+
+        res = concentrated_graph.get_concentrated_trajectories()
+        map_tra_len = concentrated_graph.max_level + 1
+
+        return res, map_tra_len
+
+
+ 

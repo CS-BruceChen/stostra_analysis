@@ -39,13 +39,8 @@ def second_segmenting(self) -> dict:
                     for pid2 in arranged_second_tra[sorted_years[i+1]]:
                         second_segments_dict[f"{sorted_years[i]}_{sorted_years[i+1]}"].append((pid1,pid2)) #连续年份对应的各自的论文的全连接
 
-        return second_segments_dict
-
     
-
-
-            
-
+    return second_segments_dict
 
 def compute_second_connection(mcs: MapConstructorSegment, segments_dict: dict) -> dict:
     '''
